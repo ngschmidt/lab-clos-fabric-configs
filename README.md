@@ -1,2 +1,2 @@
-# lab-clos-fabric-configs
-Lab Clos Fabric Config Examples
+# Clos Fabric Example Configurations
+
