@@ -1,0 +1,151 @@
+!
+version 12.2
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname bgp-as64901-l1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+!
+no aaa new-model
+system mtu routing 1500
+ip routing
+no ip domain-lookup
+!
+!
+ipv6 unicast-routing
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+interface Loopback0
+ ip address 10.6.0.1 255.255.255.255
+ ipv6 address FD00:6::1/128
+!
+interface FastEthernet0/1
+!
+interface FastEthernet0/2
+!
+interface FastEthernet0/3
+!
+interface FastEthernet0/4
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+ no switchport
+ ip address 10.6.240.3 255.255.255.254
+ ipv6 address FD00:6:240::6/126
+ ipv6 enable
+!
+interface FastEthernet0/23
+ no switchport
+ ip address 10.6.241.3 255.255.255.254
+ ipv6 address FD00:6:241::6/126
+ ipv6 enable
+!
+interface FastEthernet0/24
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ no ip address
+!
+router bgp 64901
+ bgp log-neighbor-changes
+ neighbor 10.6.240.2 remote-as 65000
+ neighbor 10.6.240.2 update-source FastEthernet0/22
+ neighbor 10.6.241.2 remote-as 65001
+ neighbor 10.6.241.2 update-source FastEthernet0/23
+ neighbor FD00:6:240::5 remote-as 65000
+ neighbor FD00:6:240::5 update-source FastEthernet0/22
+ neighbor FD00:6:241::5 remote-as 65001
+ neighbor FD00:6:241::5 update-source FastEthernet0/23
+ maximum-paths 2
+ !
+ address-family ipv4
+  neighbor 10.6.240.2 activate
+  neighbor 10.6.241.2 activate
+  no neighbor FD00:6:240::5 activate
+  no neighbor FD00:6:241::5 activate
+  maximum-paths 2
+  no auto-summary
+  no synchronization
+  network 10.6.0.0 mask 255.255.0.0
+  network 10.6.0.1 mask 255.255.255.255
+ exit-address-family
+ !
+ address-family ipv6
+  neighbor FD00:6:240::5 activate
+  neighbor FD00:6:241::5 activate
+  network FD00:6::1/128
+  no synchronization
+  maximum-paths 2
+ exit-address-family
+!
+ip classless
+ip http server
+ip http secure-server
+!
+!
+!
+!
+!
+!
+line con 0
+line vty 0 4
+ login
+line vty 5 15
+ login
+!
+end
