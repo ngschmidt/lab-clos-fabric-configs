@@ -1,0 +1,172 @@
+!
+version 12.2
+no service pad
+service timestamps debug uptime
+service timestamps log uptime
+no service password-encryption
+!
+hostname bgp-rr1-s1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+!
+no aaa new-model
+system mtu routing 1500
+ip routing
+no ip domain-lookup
+!
+!
+ipv6 unicast-routing
+!
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+interface Loopback0
+ ip address 10.6.0.241 255.255.255.255
+ ip router isis CLOS-1
+ ipv6 address FD00:6::241/128
+ ipv6 ospf 1 area 0
+!
+interface FastEthernet0/1
+!
+interface FastEthernet0/2
+!
+interface FastEthernet0/3
+!
+interface FastEthernet0/4
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+ no switchport
+ ip address 10.6.241.0 255.255.255.254
+ ip router isis CLOS-1
+ ipv6 address FD00:6:241::1/126
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+ no switchport
+ ip address 10.6.241.2 255.255.255.254
+ ip router isis CLOS-1
+ ipv6 address FD00:6:241::5/126
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface FastEthernet0/24
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ no ip address
+!
+router isis CLOS-1
+ net 42.0000.0000.0000.0241.00
+ is-type level-2-only
+ ispf level-2
+ log-adjacency-changes
+!
+router bgp 65000
+ bgp log-neighbor-changes
+ neighbor 10.6.0.0 remote-as 65000
+ neighbor 10.6.0.0 update-source Loopback0
+ neighbor 10.6.0.1 remote-as 65000
+ neighbor 10.6.0.1 update-source Loopback0
+ neighbor FD00:6:: remote-as 65000
+ neighbor FD00:6:: update-source Loopback0
+ neighbor FD00:6::1 remote-as 65000
+ neighbor FD00:6::1 update-source Loopback0
+ maximum-paths 2
+ !
+ address-family ipv4
+  neighbor 10.6.0.0 activate
+  neighbor 10.6.0.0 route-reflector-client
+  neighbor 10.6.0.1 activate
+  neighbor 10.6.0.1 route-reflector-client
+  neighbor FD00:6:: activate
+  neighbor FD00:6:: route-reflector-client
+  neighbor FD00:6::1 activate
+  neighbor FD00:6::1 route-reflector-client
+  maximum-paths 2
+  no auto-summary
+  no synchronization
+  network 10.6.0.240 mask 255.255.255.254
+  network 10.6.240.0 mask 255.255.255.254
+  network 10.6.240.2 mask 255.255.255.254
+ exit-address-family
+ !
+ address-family ipv6
+  neighbor FD00:6:: activate
+  neighbor FD00:6::1 activate
+  network FD00:6::240/127
+  network FD00:6:240::/126
+  network FD00:6:240::4/126
+  no synchronization
+  maximum-paths 2
+ exit-address-family
+!
+ip classless
+ip http server
+ip http secure-server
+!
+!
+ipv6 router ospf 1
+ router-id 10.6.0.241
+ log-adjacency-changes
+ maximum-paths 4
+!
+!
+!
+!
+!
+line con 0
+line vty 0 4
+ login
+line vty 5 15
+ login
+!
